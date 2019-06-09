@@ -8,11 +8,10 @@
    Returns the parameters passed to draw."
 
   (q/no-loop) ; static output
-  (q/color-mode :hsb) ; changing the color space
+  (q/color-mode :hsb 1.0) ; changing the color space to match thi.ng
   ; setup function returns initial state. It contains
   ; circle color and position.
-  {:floors 0
-   :rooms 0})
+  {})
 
 (q/defsketch tableau
   :title "RESPATIALIZED // STRUCTURE"
