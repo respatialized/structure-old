@@ -7,7 +7,6 @@
   "Initial setup fn.
    Returns the parameters passed to draw."
 
-  (q/no-loop) ; static output
   (q/color-mode :hsb 1.0) ; changing the color space to match thi.ng
   ; setup function returns initial state. It contains
   ; circle color and position.
@@ -27,4 +26,5 @@
 
 (defn refresh []
   (use :reload 'structure.plot)
-  (.loop tableau))
+  (.loop tableau)
+  )
