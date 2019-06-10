@@ -44,10 +44,10 @@
                      (-> (keys colors)
                          (#(map themes/get-key-num %))
                          (#(map (fn [n] (* -1 n)) %))
-                         (#(powerlaws/powers-of 1.5 %)))
+                         (#(powerlaws/powers-of 1.9 %)))
                      (keys colors)))
-        rows 170
-        cols 120
+        rows 160
+        cols 20
         xspan (/ 1 cols)
         yspan (/ 1 rows)
         fill-colors (random-colors (* rows cols) color-probs)]
@@ -63,7 +63,7 @@
             colorkey (nth fill-colors (+ (* c cols) r))]
         (q/no-stroke)
         (apply q/fill (css->color (get colors (get color-probs colorkey)) :hsb))
-        (q/rect x y (w xspan) (h yspan))
+        (q/rect x y (w (* 0.85 xspan)) (h yspan))
         ))
 
     ;; (doseq [a (range 20)
