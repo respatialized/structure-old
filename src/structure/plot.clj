@@ -15,6 +15,11 @@
   ([] (w 1.0))
   ([value] (* (q/width) value)))
 
+(defn unmap
+  "takes a width/height and a pixel value and converts it to a fraction"
+  [v dim]
+  (float (/ v dim)))
+
 (defn css->color
   "returns a quil-ready color vector from the given hex code.
    if no param specified, returns in rgba."
@@ -44,7 +49,7 @@
                      (-> (keys colors)
                          (#(map themes/get-key-num %))
                          (#(map (fn [n] (* -1 n)) %))
-                         (#(powerlaws/powers-of 1.9 %)))
+                         (#(powerlaws/powers-of 1.2 %)))
                      (keys colors)))
         rows 160
         cols 20

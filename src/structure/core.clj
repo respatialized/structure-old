@@ -14,7 +14,7 @@
 
 (q/defsketch tableau
   :title "RESPATIALIZED // STRUCTURE"
-  :size [1200 1700]
+  :size [700 1000]
   ; setup function called only once, during sketch initialization.
   :setup setup
   ; update-state is called on each iteration before draw-state.
