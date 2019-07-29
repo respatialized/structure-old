@@ -9,17 +9,17 @@
 (defn translate-pt
   "Returns a point from the given point given a distance (in pixels) and bearing (in radians)."
   [[x y] bearing dist]
-  (let [ydelt (m/* (m/sin bearing) dist)
-        xdelt (m/* (m/cos bearing) dist)]
+  (let [ydelt (m/* (m/cos bearing) dist)
+        xdelt (m/* (m/sin bearing) dist)]
     [(m/+ x xdelt) (m/+ y ydelt)]))
 
 (defn tri
   "Returns a triangle of points based on the starting point and radius given."
   [pt radius]
   (let [top (translate-pt pt 0.0 radius)
-        right (translate-pt (m// (m/* 2 m/PI) 3))
-        left (translate-pt (m// (m/* 4 m/PI) 3))])
-  )
+        right (translate-pt pt (m// (m/* 2 m/PI) 3) radius)
+        left (translate-pt pt (m// (m/* 4 m/PI) 3) radius)]
+    [top right left]))
 
 (def surface (clj2d/canvas 500 500))
 (def display (clj2d/show-window surface "RESPATIALIZED // STRUCTURE // SIERPINSKI"))
@@ -31,20 +31,36 @@
 (def endpt (translate-pt [startx starty] 1.62 100))
 (def endpts (map #(translate-pt [startx starty] % 100) bearings))
 
-(defn ellipse-pts [canvas]
-  (doseq [pt endpts]
-    (clj2d/ellipse canvas (first pt) (nth pt 1) 10 10)))
+(defn ellipse-pts [canvas pts]
+  (doseq [pt pts]
+    (clj2d/ellipse canvas (first pt) (nth pt 1) 2 2)))
+
+(defn lazy-frac [func startpt]
+  (let [mfn (fn [c] (flatten (map func c)))]
+    (iterate mfn startpt)))
+
+(defn triflat [pts radius]
+  (apply concat (map #(tri % radius) pts)))
+
+;; data structure for sierpinski triangle: a map of the form
+;; {:pts [[x1 y1] [x2 y2] ... [xn yn]]
+;;  :radius 20}
+
+(defn sierpinski-iter [smap]
+  {:pts (triflat (:pts smap) (:radius smap))
+   :radius (m// (:radius smap) 2)})
+
+(def sierpoints
+  (:pts
+   (last
+    (take-while
+     #(< 0 (:radius %))
+     (iterate sierpinski-iter {:pts [[250 250]] :radius 125})))))
 
 (def current-frame
   (clj2d/with-canvas-> surface
-    (clj2d/set-background 10 5 5)
-    (clj2d/set-color 210 210 200)
-    (clj2d/rect 100 100 200 200) ;; draw rectangle
-    (clj2d/set-color 255 0 0)
-    (clj2d/ellipse (first endpt) (nth endpt 1) 10 10)
-    (clj2d/set-color 0 255 0)
-    (clj2d/ellipse startx starty 10 10)
-    (clj2d/set-color 0 0 255)
-    ellipse-pts))
+    (clj2d/set-background 50 50 50)
+    (clj2d/set-color 205 205 205)
+    (ellipse-pts sierpoints)))
 
 
