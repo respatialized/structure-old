@@ -33,7 +33,7 @@
 
 (defn ellipse-pts [canvas pts]
   (doseq [pt pts]
-    (clj2d/ellipse canvas (first pt) (nth pt 1) 2 2)))
+    (clj2d/ellipse canvas (first pt) (nth pt 1) 60 60 true)))
 
 (defn lazy-frac [func startpt]
   (let [mfn (fn [c] (flatten (map func c)))]
@@ -60,6 +60,7 @@
 (def current-frame
   (clj2d/with-canvas-> surface
     (clj2d/set-background 50 50 50)
+    (clj2d/set-stroke 1)
     (clj2d/set-color 205 205 205)
     (ellipse-pts sierpoints)))
 
